@@ -1,3 +1,5 @@
+"""
+코드트리 조삼모사: 조합으로 풀려다가 시간 복잡도로 인해 실패
 N = int(input())
 
 work = []
@@ -24,15 +26,7 @@ def comb(comb_list, pick_num):
 
 poss_list = [n+1 for n in range(N)]
 combi = comb(poss_list, N/2)
-"""
-for c in combi:
-    temp_list = []
-    for i in range(N):
-        if not (i+1 in c):
-            temp_list.append(i+1)
-    if temp_list in combi:
-        combi.pop(combi.index(temp_list))
-"""
+
 non_CC = []
 
 min_val = 10000000
@@ -58,4 +52,42 @@ for CC in combi:
     if min_val > abs(val1 - val2):
         min_val = abs(val1 - val2)
 
+print(min_val)
+
+"""
+
+N = int(input())
+work_m = [list(map(int, input().split())) for _ in range(N)]
+evening = [False for _ in range(N)]
+
+def cal_diff():
+    morning_sum = [work_m[i][j]
+        for i in range(N)
+        for j in range(N)
+        if evening[i] == False and evening[j] == False]
+
+    evening_sum = [work_m[i][j]
+               for i in range(N)
+               for j in range(N)
+               if evening[i] == True and evening[j] == True]
+
+    return abs(sum(morning_sum) - sum(evening_sum))
+
+
+min_val = 10000000
+def cal_c(c_idx, selected_num):
+    global min_val
+    if selected_num == N/2:
+        min_val = min(min_val, cal_diff())
+        return
+
+    if c_idx == N:
+        return
+
+    cal_c(c_idx+1, selected_num)
+    evening[c_idx] = True
+    cal_c(c_idx + 1, selected_num+1)
+    evening[c_idx] = False
+
+cal_c(0, 0)
 print(min_val)
