@@ -1,4 +1,5 @@
 from collections import deque
+import copy
 
 n, m = map(int, input().split())
 fire_map = [list(map(int, input().split())) for _ in range(n)]
@@ -18,7 +19,7 @@ dc = [0, 0, 1, -1]
 
 
 def fill_fire_count():
-    temp_map = fire_map
+    temp_map = copy.deepcopy(fire_map)
     fire_queue = deque(fire_list)
     while fire_queue:
         fire = fire_queue.popleft()
@@ -60,3 +61,10 @@ def wall(wall_count, empty_list):
 
 wall(0, empty_space)
 print(max_val)
+
+"""
+3 4
+0 0 0 0
+0 2 0 0
+0 0 0 2
+"""
