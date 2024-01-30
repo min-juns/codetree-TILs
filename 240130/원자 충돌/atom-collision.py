@@ -50,7 +50,7 @@ for _ in range(k):
                             next_map[n_r][n_c].append([nm, ns, nd + i * 2])
 
             elif len(temp_map[r][c]) == 1:
-                temp_atom = temp_map[r][c]
+                temp_atom = temp_map[r][c][0]
                 if next_map[r][c] == []:
                     next_map[r][c] = [[temp_atom[0], temp_atom[1], temp_atom[2]]]
                 else:
