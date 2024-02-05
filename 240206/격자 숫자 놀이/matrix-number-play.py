@@ -80,9 +80,10 @@ def cal_t(g_map):
     return False
 
 import sys
-if number_map[r - 1][c - 1] == k:
-    print(0)
-    sys.exit(0)
+if len(number_map) >= r and len(number_map[0]) >= c:
+    if number_map[r - 1][c - 1] == k:
+        print(0)
+        sys.exit(0)
 
 while True:
     mr = len(number_map)
