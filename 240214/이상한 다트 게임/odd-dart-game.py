@@ -23,11 +23,14 @@ for t in range(q):
 
     temp_dart = copy.deepcopy(dart)
     # step 2: 같은 수 지우기
+    norm = True
     for r in range(n):
         for c in range(m):
             # r: 반지름 크기, c: 몇번째 숫자인지
             check = False
             current_num = dart[r][c]
+            if current_num == 0:
+                continue
             for i in range(4):
                 nr = r + dr[i]
                 nc = c + dc[i]
@@ -38,9 +41,30 @@ for t in range(q):
                 if dart[nr][nc] == current_num:
                     check = True
                     temp_dart[nr][nc] = 0
+                    norm = False
             if check:
                 temp_dart[r][c] = 0
+
     dart = temp_dart
+    # step 3: 정규화
+    if norm:
+        standard = 0
+        num = 0
+        for r in range(n):
+            for c in range(m):
+                if dart[r][c] == 0:
+                    continue
+                standard += dart[r][c]
+                num += 1
+        standard = standard // num
+        for r in range(n):
+            for c in range(m):
+                if dart[r][c] == 0:
+                    continue
+                if dart[r][c] > standard:
+                    dart[r][c] = dart[r][c] - 1
+                elif dart[r][c] < standard:
+                    dart[r][c] = dart[r][c] + 1
 
 res = 0
 for r in range(n):
