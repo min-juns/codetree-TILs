@@ -1,7 +1,7 @@
 from collections import deque
 # n: 배지의 크기, m: 바이러스 개수, k: 사이클의 수
 n, m, k = map(int, input().split())
-n_map = [[5 for _ in range(n)] for _ in range(5)]
+n_map = [[5 for _ in range(n)] for _ in range(n)]
 plus_n_map = [list(map(int, input().split())) for _ in range(n)]
 v_map = [[0 for _ in range(n)] for _ in range(n)]
 
