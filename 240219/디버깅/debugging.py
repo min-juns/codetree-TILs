@@ -88,10 +88,13 @@ def add_and_check(num):
                         connection[add_r][add_c] = 0
     return check_third
 
-if not check_second:
-    add_and_check(0)
-    if check_third:
-        print(2)
+if not check_first:
+    if not check_second:
+        add_and_check(0)
+        if check_third:
+            print(2)
 
-if not check_first and not check_second and not check_third:
-    print(-1)
+if not check_first:
+    if not check_second:
+        if not check_third:
+            print(-1)
