@@ -76,13 +76,14 @@ def add_and_check(num):
         for r in range(h):
             for c in range(n - 1):
                 add_r, add_c = r, c + 1
-                if c + 1 == n - 1:
+                if add_c == n - 1:
                     if connection[add_r][add_c - 1] == 0 and connection[add_r][add_c] == 0:
                         connection[add_r][add_c] = 1
                         add_and_check(num+1)
                         connection[add_r][add_c] = 0
                 else:
-                    if connection[add_r][add_c - 1] == 0 and connection[add_r][add_c + 1] == 0 and connection[add_r][add_c] == 0:
+                    if (connection[add_r][add_c - 1] == 0 and connection[add_r][add_c + 1] == 0 and
+                            connection[add_r][add_c] == 0):
                         connection[add_r][add_c] = 1
                         add_and_check(num+1)
                         connection[add_r][add_c] = 0
@@ -94,7 +95,39 @@ if not check_first:
         if check_third:
             print(2)
 
+# case 4: 3개 추가
+check_fourth = False
+def add_and_check2(num):
+    global check_fourth
+    if check_fourth:
+        return
+    if num >= 3:
+        check_fourth = check_connection()
+    else:
+        for r in range(h):
+            for c in range(1, n):
+                add_r, add_c = r, c
+                if add_c == n - 1:
+                    if connection[add_r][add_c - 1] == 0 and connection[add_r][add_c] == 0:
+                        connection[add_r][add_c] = 1
+                        add_and_check2(num+1)
+                        connection[add_r][add_c] = 0
+                else:
+                    if (connection[add_r][add_c - 1] == 0 and connection[add_r][add_c + 1] == 0 and
+                            connection[add_r][add_c] == 0):
+                        connection[add_r][add_c] = 1
+                        add_and_check2(num+1)
+                        connection[add_r][add_c] = 0
+
 if not check_first:
     if not check_second:
         if not check_third:
-            print(-1)
+            add_and_check2(0)
+            if check_fourth:
+                print(3)
+
+if not check_first:
+    if not check_second:
+        if not check_third:
+            if not check_fourth:
+                print(-1)
