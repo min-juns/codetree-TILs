@@ -84,7 +84,7 @@ def add_and_check(num):
                 else:
                     if connection[add_r][add_c - 1] == 0 and connection[add_r][add_c + 1] == 0 and connection[add_r][add_c] == 0:
                         connection[add_r][add_c] = 1
-                        add_and_check(num+10)
+                        add_and_check(num+1)
                         connection[add_r][add_c] = 0
     return check_third
 
