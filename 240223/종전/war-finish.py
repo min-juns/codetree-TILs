@@ -95,23 +95,21 @@ def cal_min(pr, pc, l1, l2):
 
     return max_val - min_val
 
-
-cal_min(3, 2, 1, 1)
-
 best_min = 100000
 for r in range(n):
     for c in range(n):
+        length = r + 1
         if r < 2 or c < 1:
             continue
-        for p2 in range(1, r+1):
-            if (c + dc[0] * p2) < 0 or (c + dc[0] * p2) >= n:
+        for l1 in range(1, length):
+            if c + dc[0] * l1 >= n:
                 continue
-            for p3 in range(1, r+1 - p2):
-                if (c + dc[0] * p2 + dc[1] * p3) < 0 or (c + dc[0] * p2 + dc[1] * p3) >= n:
+            for l2 in range(1, length - l1 + 1):
+                if c + dc[0] * l1 + dc[1] * l2 < 0:
                     continue
-                if c - 1 * p3 <= 0:
-                    break
-                temp_min = cal_min(r, c, p2, p3)
+                if c - 1 * l2 < 0:
+                    continue
+                temp_min = cal_min(r, c, l1, l2)
                 if best_min > temp_min:
                     best_min = temp_min
 print(best_min)
