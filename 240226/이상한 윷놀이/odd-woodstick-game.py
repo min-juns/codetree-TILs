@@ -31,6 +31,8 @@ def move_horse(move_list, move_r, move_c, color):
         if move_r < 0 or move_c < 0 or move_r >= n or move_c >= n or game_map[move_r][move_c] == 2:
             return False
         else:
+            if game_map[move_r][move_c] == 1:
+                move_list.reverse()
             horse_map[move_r][move_c] = move_list + horse_map[move_r][move_c]
             return True
 
