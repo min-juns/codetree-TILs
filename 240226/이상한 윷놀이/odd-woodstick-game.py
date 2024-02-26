@@ -23,8 +23,7 @@ def move_horse(move_list, move_r, move_c, color):
         horse_map[move_r][move_c] = move_list + horse_map[move_r][move_c]
         return True
     elif color == 1:
-        if len(move_list) >= 2:
-            move_list.reverse()
+        move_list.reverse()
         horse_map[move_r][move_c] = move_list + horse_map[move_r][move_c]
         return True
     elif color == 2:
@@ -52,7 +51,6 @@ def check_game_over():
             if len(horse_map[r][c]) >= 4:
                 return True
     return False
-
 
 # 말이 4개 이상 겹쳐지면 그 즉시 게임 종료
 turn = 0
@@ -84,7 +82,7 @@ while True:
         else:
             color = game_map[nr][nc]
         if color == 2:
-            # 파란색이면 색깔 변경
+            # 파란색이면 방향 변경
             cd = reverse_direction(cd)
             horse[3] = cd
             # 다음 위치 변경
@@ -97,16 +95,14 @@ while True:
                 for hl in horse_list:
                     if hl[0] == hid:
                         hl[1], hl[2] = nr, nc
-        else:
-            horse_map[cr][cc] = temp_move
-            if len(temp_no_move) >= 1:
-                horse_map[cr][cc].append(temp_no_move)
-
         finish = check_game_over()
         if finish:
             break
+
     if finish:
         break
+
+
     if turn >= 1000:
         fail = True
         break
