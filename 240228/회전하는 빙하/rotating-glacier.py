@@ -87,8 +87,7 @@ def find_largest(fr, fc):
                 count += 1
                 visited[nr][nc] = True
                 queue.append((nr, nc))
-    if count == 3:
-        print(fr, fc)
+
     return count
 
 for r in range(N):
