@@ -17,14 +17,13 @@ for n in range(1, N+1):
     hp[n] = k
 initial_hp = copy.deepcopy(hp)
 
-visited = [False for _ in range(N+1)]
+# 상, 우, 하, 좌
 dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
 temp_horse_map = copy.deepcopy(horse_map)
-moved_list = []
 def move_horse(horse_id, direction):
-    global horse_map
     global temp_horse_map
+    global visited
     visited[horse_id] = True
     horse_list = []
     for r in range(L):
@@ -35,14 +34,13 @@ def move_horse(horse_id, direction):
     for hl in horse_list:
         cr, cc = hl
         nr, nc = cr + dr[direction], cc + dc[direction]
-        if nr < 0 or nc < 0 or nr >= L or nc >= L:
+        if nr < 0 or nc < 0 or nr >= L or nc >= L or game_map[nr][nc] == 2:
             return False
-        if game_map[nr][nc] == 2:
-            return False
-        if horse_map[nr][nc] != 0 and visited[horse_map[nr][nc]] == False:
-            moved = move_horse(horse_map[nr][nc], direction)
-            if not moved:
-                return False
+        if horse_map[nr][nc] == 0 or visited[horse_map[nr][nc]]:
+            continue
+        move_true = move_horse(horse_map[nr][nc], direction)
+        if not move_true:
+            return move_true
     for hl in horse_list:
         cr, cc = hl
         temp_horse_map[cr][cc] = 0
@@ -51,6 +49,7 @@ def move_horse(horse_id, direction):
         nr, nc = cr + dr[direction], cc + dc[direction]
         temp_horse_map[nr][nc] = horse_id
     moved_list.append(horse_id)
+
     return True
 
 # 밀린 기사는 피해 X
@@ -61,21 +60,24 @@ def damage(attack_id):
     for r in range(L):
         for c in range(L):
             horse_id = horse_map[r][c]
-            if not (horse_id in moved_list) or horse_id == attack_id:
+            if horse_id == 0 or not (horse_id in moved_list) or horse_id == attack_id:
                 continue
-            if horse_id != 0 and game_map[r][c] == 1:
+            if game_map[r][c] == 1:
                 if hp[horse_id] > 0:
                     hp[horse_id] -= 1
 
 
+
 for q in range(Q):
-    moved = False
+    moved_list = []
+    visited = [False for _ in range(N + 1)]
+    # 상 우 하 좌
     id, d = map(int, input().split())
     if hp[id] <= 0:
         continue
     moved = move_horse(id, d)
     if moved:
-        horse_map = temp_horse_map
+        horse_map = copy.deepcopy(temp_horse_map)
     else:
         temp_horse_map = copy.deepcopy(horse_map)
     if moved:
@@ -87,8 +89,6 @@ for q in range(Q):
                     for c in range(L):
                         if horse_map[r][c] == hid:
                             horse_map[r][c] = 0
-    visited = [False for _ in range(N+1)]
-    moved_list = []
 
 total_damage = 0
 for i in range(len(hp)):
