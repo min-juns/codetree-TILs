@@ -88,7 +88,7 @@ for q in range(Q):
                     for c in range(L):
                         if horse_map[r][c] == hid:
                             horse_map[r][c] = 0
-
+    temp_horse_map = copy.deepcopy(horse_map)
 total_damage = 0
 for i in range(len(hp)):
     if hp[i] > 0:
