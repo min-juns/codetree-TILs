@@ -92,7 +92,7 @@ for q in range(Q):
 
 total_damage = 0
 for i in range(len(hp)):
-    if hp[i] != 0:
+    if hp[i] > 0:
         total_damage += (initial_hp[i] - hp[i])
 print(total_damage)
 
