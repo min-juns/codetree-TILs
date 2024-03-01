@@ -24,6 +24,7 @@ temp_horse_map = copy.deepcopy(horse_map)
 def move_horse(horse_id, direction):
     global temp_horse_map
     global visited
+    global moved_list
     visited[horse_id] = True
     horse_list = []
     for r in range(L):
@@ -55,7 +56,6 @@ def move_horse(horse_id, direction):
 # 밀린 기사는 피해 X
 # 움직인 기사들만 피해를 받음
 def damage(attack_id):
-    global total_damage
     global hp
     for r in range(L):
         for c in range(L):
@@ -65,7 +65,6 @@ def damage(attack_id):
             if game_map[r][c] == 1:
                 if hp[horse_id] > 0:
                     hp[horse_id] -= 1
-
 
 
 for q in range(Q):
@@ -84,7 +83,7 @@ for q in range(Q):
         damage(id)
         # hp가 0으로 떨어진 기사는 제외
         for hid, h in enumerate(hp):
-            if h == 0 and (hid in moved_list):
+            if h <= 0 and (hid in moved_list):
                 for r in range(L):
                     for c in range(L):
                         if horse_map[r][c] == hid:
@@ -95,21 +94,3 @@ for i in range(len(hp)):
     if hp[i] > 0:
         total_damage += (initial_hp[i] - hp[i])
 print(total_damage)
-
-
-"""
-40 30 100
-2 1 0 1 0 0 0 0 0 0 1 0 0 0 1 1 2 0 0 1 0 0 0 0 0 1 2 0 1 1 0 0 1 1 1 0 0 1 1 1
-2 1 1 0 1 0 1 0 1 1 2 2 0 1 1 0 1 1 1 2 1 1 0 2 0 0 0 0 1 1 1 1 0 1 1 0 0 1 1 1
-1 1 0 1 2 0 0 1 0 0 0 1 1 1 1 1 0 1 1 1 1 1 0 0 1 1 0 0 1 0 1 1 1 1 0 2 2 0 0 1
-0 0 1 0 0 1 1 0 0 1 0 1 0 1 0 0 1 0 0 1 0 0 1 1 0 1 0 0 1 1 1 1 1 0 1 1 0 0 1 0
-1 2 0 1 0 1 1 1 0 1 1 0 1 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 1 1 1 0 0 0 0 1 2 0 1 1
-1 0 0 1 1 0 0 1 1 1 1 1 1 1 1 1 0 1 0 1 1 0 0 0 1 1 0 1 1 1 1 1 1 1 1 1 1 0 1 0
-1 0 1 1 2 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 0 1 1 0
-1 1 1 1 0 0 1 1 0 1 0 1 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1 0 0 1 0 0 1 1 0 0 2 1 0 1
-2 1 2 1 0 1 2 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 0 1 1 2 2 0 0 0
-1 0 0 1 0 2 2 1 1 0 0 0 1 1 1 1 0 0 1 0 1 1 1 1 0 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0
-0 0 2 2 1 1 1 1 0 0 0 1 1 0 1 1 1 1 1 0 1 1 0 1 1 0 1 0 1 1 0 1 1 1 0 2 1 1 2 1
-1 1 1 1 1 0 1 0 1 1 0 0 1 1 1 1 0 1 0 1 0 0 1 1 1 1 1 2 0 1 1 0 0 1 1 1 0 0 0 1
-2 1 0 1 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 1 1 1 0 1 1 1 0 ...(truncated)
-"""
