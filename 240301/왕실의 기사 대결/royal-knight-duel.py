@@ -17,14 +17,13 @@ for n in range(1, N+1):
     hp[n] = k
 initial_hp = copy.deepcopy(hp)
 
-visited = [False for _ in range(N+1)]
+# 상, 우, 하, 좌
 dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
 temp_horse_map = copy.deepcopy(horse_map)
-moved_list = []
 def move_horse(horse_id, direction):
-    global horse_map
     global temp_horse_map
+    global visited
     visited[horse_id] = True
     horse_list = []
     for r in range(L):
@@ -35,14 +34,13 @@ def move_horse(horse_id, direction):
     for hl in horse_list:
         cr, cc = hl
         nr, nc = cr + dr[direction], cc + dc[direction]
-        if nr < 0 or nc < 0 or nr >= L or nc >= L:
+        if nr < 0 or nc < 0 or nr >= L or nc >= L or game_map[nr][nc] == 2:
             return False
-        if game_map[nr][nc] == 2:
-            return False
-        if horse_map[nr][nc] != 0 and visited[horse_map[nr][nc]] == False:
-            moved = move_horse(horse_map[nr][nc], direction)
-            if not moved:
-                return False
+        if horse_map[nr][nc] == 0 or visited[horse_map[nr][nc]]:
+            continue
+        move_true = move_horse(horse_map[nr][nc], direction)
+        if not move_true:
+            return move_true
     for hl in horse_list:
         cr, cc = hl
         temp_horse_map[cr][cc] = 0
@@ -51,6 +49,7 @@ def move_horse(horse_id, direction):
         nr, nc = cr + dr[direction], cc + dc[direction]
         temp_horse_map[nr][nc] = horse_id
     moved_list.append(horse_id)
+
     return True
 
 # 밀린 기사는 피해 X
@@ -61,21 +60,24 @@ def damage(attack_id):
     for r in range(L):
         for c in range(L):
             horse_id = horse_map[r][c]
-            if not (horse_id in moved_list) or horse_id == attack_id:
+            if horse_id == 0 or not (horse_id in moved_list) or horse_id == attack_id:
                 continue
-            if horse_id != 0 and game_map[r][c] == 1:
+            if game_map[r][c] == 1:
                 if hp[horse_id] > 0:
                     hp[horse_id] -= 1
 
 
+
 for q in range(Q):
-    moved = False
+    moved_list = []
+    visited = [False for _ in range(N + 1)]
+    # 상 우 하 좌
     id, d = map(int, input().split())
     if hp[id] <= 0:
         continue
     moved = move_horse(id, d)
     if moved:
-        horse_map = temp_horse_map
+        horse_map = copy.deepcopy(temp_horse_map)
     else:
         temp_horse_map = copy.deepcopy(horse_map)
     if moved:
@@ -87,137 +89,27 @@ for q in range(Q):
                     for c in range(L):
                         if horse_map[r][c] == hid:
                             horse_map[r][c] = 0
-    visited = [False for _ in range(N+1)]
-    moved_list = []
 
 total_damage = 0
 for i in range(len(hp)):
-    if hp[i] > 0:
+    if hp[i] != 0:
         total_damage += (initial_hp[i] - hp[i])
 print(total_damage)
 
 
-
 """
-10 10 100
-1 2 0 1 1 1 1 1 0 1
-1 2 1 0 0 1 1 0 0 1
-1 1 0 1 1 1 1 1 0 1
-1 1 1 1 1 0 0 1 0 0
-1 1 1 0 0 0 1 1 0 0
-0 1 0 2 2 2 0 0 2 2
-1 0 1 1 0 1 0 1 1 0
-0 1 0 0 1 0 1 2 1 1
-1 1 1 2 1 1 1 1 1 1
-1 0 0 0 1 0 1 2 1 0
-8 9 3 2 100
-10 5 1 2 65
-6 7 4 1 59
-6 1 2 2 48
-1 7 4 4 39
-3 2 2 4 25
-9 3 1 1 91
-8 4 1 2 39
-1 6 4 1 13
-5 3 1 7 42
-4 0
-8 2
-5 0
-2 0
-9 0
-6 1
-4 0
-6 1
-7 0
-4 1
-9 3
-9 2
-8 0
-5 2
-2 1
-5 0
-4 2
-4 3
-6 3
-6 3
-8 0
-2 0
-9 2
-10 1
-4 1
-5 2
-10 0
-7 3
-4 2
-2 2
-2 1
-9 0
-3 2
-9 1
-1 3
-2 0
-5 1
-3 0
-6 1
-2 2
-2 3
-8 1
-3 2
-2 0
-1 2
-9 3
-7 3
-6 2
-1 3
-5 1
-7 0
-9 2
-10 3
-5 2
-3 2
-4 0
-2 2
-6 1
-2 2
-5 2
-6 3
-9 1
-4 2
-8 1
-8 1
-7 1
-10 2
-3 1
-4 2
-8 1
-3 3
-6 0
-3 3
-8 2
-1 3
-8 2
-6 1
-6 1
-3 2
-2 1
-7 0
-10 3
-7 1
-6 2
-8 3
-7 1
-10 2
-3 1
-7 1
-8 0
-3 1
-1 3
-7 0
-6 2
-10 0
-1 3
-1 1
-2 2
-10 2
-5 3
+40 30 100
+2 1 0 1 0 0 0 0 0 0 1 0 0 0 1 1 2 0 0 1 0 0 0 0 0 1 2 0 1 1 0 0 1 1 1 0 0 1 1 1
+2 1 1 0 1 0 1 0 1 1 2 2 0 1 1 0 1 1 1 2 1 1 0 2 0 0 0 0 1 1 1 1 0 1 1 0 0 1 1 1
+1 1 0 1 2 0 0 1 0 0 0 1 1 1 1 1 0 1 1 1 1 1 0 0 1 1 0 0 1 0 1 1 1 1 0 2 2 0 0 1
+0 0 1 0 0 1 1 0 0 1 0 1 0 1 0 0 1 0 0 1 0 0 1 1 0 1 0 0 1 1 1 1 1 0 1 1 0 0 1 0
+1 2 0 1 0 1 1 1 0 1 1 0 1 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 1 1 1 0 0 0 0 1 2 0 1 1
+1 0 0 1 1 0 0 1 1 1 1 1 1 1 1 1 0 1 0 1 1 0 0 0 1 1 0 1 1 1 1 1 1 1 1 1 1 0 1 0
+1 0 1 1 2 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 0 1 1 0
+1 1 1 1 0 0 1 1 0 1 0 1 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1 0 0 1 0 0 1 1 0 0 2 1 0 1
+2 1 2 1 0 1 2 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 0 1 1 2 2 0 0 0
+1 0 0 1 0 2 2 1 1 0 0 0 1 1 1 1 0 0 1 0 1 1 1 1 0 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0
+0 0 2 2 1 1 1 1 0 0 0 1 1 0 1 1 1 1 1 0 1 1 0 1 1 0 1 0 1 1 0 1 1 1 0 2 1 1 2 1
+1 1 1 1 1 0 1 0 1 1 0 0 1 1 1 1 0 1 0 1 0 0 1 1 1 1 1 2 0 1 1 0 0 1 1 1 0 0 0 1
+2 1 0 1 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 1 1 1 0 1 1 1 0 ...(truncated)
 """
