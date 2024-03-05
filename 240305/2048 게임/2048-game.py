@@ -158,7 +158,7 @@ def dfs(count):
         for i in range(4):
             run_game(i)
             dfs(count+1)
-            game_map = temp_map
+            game_map = copy.deepcopy(temp_map)
 
 dfs(0)
 print(total_max)
