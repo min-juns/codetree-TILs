@@ -1,14 +1,13 @@
-import copy
 N = int(input())
 game_map = [list(map(int, input().split())) for _ in range(N)]
-def up():
-    global game_map
+def up(g_map):
+    new_map = [[0 for _ in range(N)] for _ in range(N)]
     # 세로방향으로 모으기
     for c in range(N):
         temp_list = []
         new_list = []
         for r in range(N):
-            content = game_map[r][c]
+            content = g_map[r][c]
             if content != 0:
                 temp_list.append(content)
         num_idx = len(temp_list)
@@ -26,19 +25,20 @@ def up():
                     new_list.append(temp_list[t])
         for r in range(N):
             if r < len(new_list):
-                game_map[r][c] = new_list[r]
+                new_map[r][c] = new_list[r]
             else:
-                game_map[r][c] = 0
+                new_map[r][c] = 0
+    return new_map
 
 
-def down():
-    global game_map
+def down(g_map):
+    new_map = [[0 for _ in range(N)] for _ in range(N)]
     # 세로방향으로 모으기
     for c in range(N):
         temp_list = []
         new_list = []
         for r in range(N):
-            content = game_map[r][c]
+            content = g_map[r][c]
             if content != 0:
                 temp_list.append(content)
 
@@ -58,19 +58,20 @@ def down():
 
         for r in range(N):
             if r < len(new_list):
-                game_map[-r-1][c] = new_list[r]
+                new_map[-r-1][c] = new_list[r]
             else:
-                game_map[-r-1][c] = 0
+                new_map[-r-1][c] = 0
+    return new_map
 
 
-def left():
-    global game_map
+def left(g_map):
+    new_map = [[0 for _ in range(N)] for _ in range(N)]
     # 세로방향으로 모으기
     for r in range(N):
         temp_list = []
         new_list = []
         for c in range(N):
-            content = game_map[r][c]
+            content = g_map[r][c]
             if content != 0:
                 temp_list.append(content)
         num_idx = len(temp_list)
@@ -88,19 +89,20 @@ def left():
                     new_list.append(temp_list[t])
         for c in range(N):
             if c < len(new_list):
-                game_map[r][c] = new_list[c]
+                new_map[r][c] = new_list[c]
             else:
-                game_map[r][c] = 0
+                new_map[r][c] = 0
+    return new_map
 
 
-def right():
-    global game_map
+def right(g_map):
+    new_map = [[0 for _ in range(N)] for _ in range(N)]
     # 세로방향으로 모으기
     for r in range(N):
         temp_list = []
         new_list = []
         for c in range(N):
-            content = game_map[r][c]
+            content = g_map[r][c]
             if content != 0:
                 temp_list.append(content)
 
@@ -120,45 +122,43 @@ def right():
 
         for c in range(N):
             if c < len(new_list):
-                game_map[r][-c-1] = new_list[c]
+                new_map[r][-c-1] = new_list[c]
             else:
-                game_map[r][-c-1] = 0
+                new_map[r][-c-1] = 0
+    return new_map
 
 
-def get_max():
+def get_max(g_map):
     max_val = 0
     for r in range(N):
         for c in range(N):
-            if game_map[r][c] > max_val:
-                max_val = game_map[r][c]
+            if g_map[r][c] > max_val:
+                max_val = g_map[r][c]
     return max_val
 
 
-def run_game(val):
+def run_game(val, g_map):
     if val == 0:
-        up()
+        return up(g_map)
     elif val == 1:
-        down()
+        return down(g_map)
     elif val == 2:
-        left()
+        return left(g_map)
     elif val == 3:
-        right()
+        return right(g_map)
 
 
 total_max = 0
-def dfs(count):
+def dfs(count, gmap):
     global total_max
-    global game_map
     if count == 5:
-        temp_val = get_max()
+        temp_val = get_max(gmap)
         total_max = max(temp_val, total_max)
         return
     else:
-        temp_map = copy.deepcopy(game_map)
         for i in range(4):
-            run_game(i)
-            dfs(count+1)
-            game_map = copy.deepcopy(temp_map)
+            next_map = run_game(i, gmap)
+            dfs(count+1, next_map)
 
-dfs(0)
+dfs(0, game_map)
 print(total_max)
