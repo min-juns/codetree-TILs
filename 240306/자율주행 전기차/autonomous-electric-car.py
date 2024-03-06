@@ -68,7 +68,7 @@ while True:
     elif len(customer_s) == 1:
         cus_id = 0
 
-    if l_map[customer_s[cus_id][0]][customer_s[cus_id][0]] == -1:
+    if l_map[customer_s[cus_id][0]][customer_s[cus_id][1]] == -1:
         do_break = True
         break
 
