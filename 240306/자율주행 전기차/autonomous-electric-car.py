@@ -42,9 +42,10 @@ def del_idx(temp_list, idx):
 do_break = False
 while True:
     l_map = find_min_distance(car_r, car_c)
-    cus_id = 0
+    cus_id = -1
     min_len = 1e+10
     best_r, best_c = -1, -1
+    nothing = True
     if len(customer_s) != 1:
         for c in range(len(customer_s)):
             c_r, c_c = customer_s[c]
@@ -52,21 +53,23 @@ while True:
                 cus_id = c
                 min_len = l_map[c_r][c_c]
                 best_r, best_c = c_r, c_c
+                nothing = False
             elif l_map[c_r][c_c] == min_len:
                 if c_r < best_r:
                     cus_id = c
                     min_len = l_map[c_r][c_c]
                     best_r, best_c = c_r, c_c
+                    nothing = False
                 elif c_r == best_r:
                     if c_c < best_c:
                         cus_id = c
                         min_len = l_map[c_r][c_c]
                         best_r, best_c = c_r, c_c
-
+                        nothing = False
     elif len(customer_s) == 1:
-        cus_id, best_r, best_c = 0, 0, 0
+        cus_id = 0
 
-    if best_r == -1 and best_c == -1:
+    if nothing:
         do_break = True
         break
 
