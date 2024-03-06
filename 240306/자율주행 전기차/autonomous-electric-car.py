@@ -67,7 +67,6 @@ while True:
                         best_r, best_c = c_r, c_c
     elif len(customer_s) == 1:
         cus_id = 0
-
     if l_map[customer_s[cus_id][0]][customer_s[cus_id][1]] == -1:
         do_break = True
         break
@@ -82,6 +81,11 @@ while True:
         car_r, car_c = start_r, start_c
 
     l2_map = find_min_distance(car_r, car_c)
+
+    if l2_map[customer_d[cus_id][0]][customer_d[cus_id][1]] == -1:
+        do_break = True
+        break
+
     battery = battery - l2_map[arrive_r][arrive_c]
     if battery < 0:
         do_break = True
