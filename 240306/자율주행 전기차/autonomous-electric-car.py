@@ -49,27 +49,26 @@ while True:
     if len(customer_s) != 1:
         for c in range(len(customer_s)):
             c_r, c_c = customer_s[c]
+            if l_map[c_r][c_c] == -1:
+                continue
             if l_map[c_r][c_c] < min_len:
                 cus_id = c
                 min_len = l_map[c_r][c_c]
                 best_r, best_c = c_r, c_c
-                nothing = False
             elif l_map[c_r][c_c] == min_len:
                 if c_r < best_r:
                     cus_id = c
                     min_len = l_map[c_r][c_c]
                     best_r, best_c = c_r, c_c
-                    nothing = False
                 elif c_r == best_r:
                     if c_c < best_c:
                         cus_id = c
                         min_len = l_map[c_r][c_c]
                         best_r, best_c = c_r, c_c
-                        nothing = False
     elif len(customer_s) == 1:
         cus_id = 0
 
-    if nothing:
+    if l_map[customer_s[cus_id][0]][customer_s[cus_id][0]] == -1:
         do_break = True
         break
 
