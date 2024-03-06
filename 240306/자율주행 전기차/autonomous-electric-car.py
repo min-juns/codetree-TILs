@@ -63,6 +63,13 @@ while True:
                         min_len = l_map[c_r][c_c]
                         best_r, best_c = c_r, c_c
 
+    elif len(customer_s) == 1:
+        cus_id, best_r, best_c = 0, 0, 0
+
+    if best_r == -1 and best_c == -1:
+        do_break = True
+        break
+
     start_r, start_c = customer_s[cus_id]
     arrive_r, arrive_c = customer_d[cus_id]
     battery = battery - l_map[start_r][start_c]
