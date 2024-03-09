@@ -99,16 +99,16 @@ def player_move(p_idx, dest_r, dest_c):
         first_player, second_player = who_win(p_idx, fight_id)
         # 기존에 있던 사람이 진 경우, 기존 사람 이동 + 진 사람 다시 이동
         if second_player:
+            # 이동한 사람의 위치 조정
+            player_idx[p_idx] = (dest_r, dest_c)
             # 기존에 있던 플레이어는 총을 해당 격자에 내려놓고 이동.
             if player_gun[fight_id] != 0:
                 lose_gun = player_gun[fight_id]
                 player_gun[fight_id] = 0
                 gun_map[dest_r][dest_c].append(lose_gun)
-            next_d = player_d[fight_id]
 
-            player_idx[p_idx] = (dest_r, dest_c)
             for i in range(4):
-                real_d = (next_d + i) % 4
+                real_d = (player_d[fight_id] + i) % 4
                 nnr, nnc = dest_r + dr[real_d], dest_c + dc[real_d]
                 if nnr < 0 or nnr >= N or nnc < 0 or nnc >= N:
                     continue
@@ -116,12 +116,12 @@ def player_move(p_idx, dest_r, dest_c):
                     continue
                 break
             player_d[fight_id] = real_d
-
             player_move(fight_id, nnr, nnc)
             # 이긴 플레이어는 승리한 칸에 떨어져 있는 총과 들고있던 총 중 높은 것 선택
             get_gun(p_idx, dest_r, dest_c)
         # 이동한 사람이 진 경우
         if first_player:
+            player_idx[p_idx] = (dest_r, dest_c)
             if player_gun[p_idx] != 0:
                 lose_gun = player_gun[p_idx]
                 player_gun[p_idx] = 0
@@ -152,21 +152,5 @@ for k in range(K):
             player_d[current_M] = p_d
             nr, nc = cr + dr[p_d], cc + dc[p_d]
         player_move(current_M, nr, nc)
-
 for tp in total_point:
     print(tp, end=" ")
-
-
-"""
-3 5 1
-0 5 0
-0 0 4
-5 3 0
-1 1 0 2
-3 3 2 1
-1 3 2 5
-2 1 1 3
-2 2 1 4
-
-0 0 5 1 1
-"""
