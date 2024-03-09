@@ -71,7 +71,8 @@ def who_win(first_idx, second_idx):
         total_point[second_idx] += player_str[second_idx] + player_gun[second_idx] - player_str[first_idx] - player_gun[first_idx]
     if second_player:
         total_point[first_idx] += player_str[first_idx] + player_gun[first_idx] - player_str[second_idx] - player_gun[second_idx]
-    
+    #print(first_idx, second_idx)
+    #print("score: ", player_str[second_idx], player_gun[second_idx], player_str[first_idx], player_gun[first_idx])
     return (first_player, second_player)
 
 
@@ -104,13 +105,18 @@ def player_move(p_idx, dest_r, dest_c):
                 player_gun[fight_id] = 0
                 gun_map[dest_r][dest_c].append(lose_gun)
             next_d = player_d[fight_id]
+
+            player_idx[p_idx] = (dest_r, dest_c)
             for i in range(4):
                 real_d = (next_d + i) % 4
                 nnr, nnc = dest_r + dr[real_d], dest_c + dc[real_d]
-                if 0 <= nnr < N and 0 <= nnc < N:
-                    break
-            player_idx[p_idx] = (dest_r, dest_c)
+                if nnr < 0 or nnr >= N or nnc < 0 or nnc >= N:
+                    continue
+                if (nnr, nnc) in player_idx:
+                    continue
+                break
             player_d[fight_id] = real_d
+
             player_move(fight_id, nnr, nnc)
             # 이긴 플레이어는 승리한 칸에 떨어져 있는 총과 들고있던 총 중 높은 것 선택
             get_gun(p_idx, dest_r, dest_c)
@@ -124,13 +130,17 @@ def player_move(p_idx, dest_r, dest_c):
             for i in range(4):
                 real_d = (next_d + i) % 4
                 nnr, nnc = dest_r + dr[real_d], dest_c + dc[real_d]
-                if 0 <= nnr < N and 0 <= nnc < N:
-                    break
+                if nnr < 0 or nnc < 0 or nnr >= N or nnc >= N:
+                    continue
+                if (nnr, nnc) in player_idx:
+                    continue
+                break
             player_d[p_idx] = real_d
-            player_idx[fight_id] = (dest_r, dest_c)
+            #player_idx[fight_id] = (dest_r, dest_c)
             player_move(p_idx, nnr, nnc)
             # 이긴 플레이어는 승리한 칸에 떨어져 있는 총과 들고있던 총 중 높은 것 선택
             get_gun(fight_id, dest_r, dest_c)
+
 
 for k in range(K):
     for current_M in range(M):
@@ -145,3 +155,18 @@ for k in range(K):
 
 for tp in total_point:
     print(tp, end=" ")
+
+
+"""
+3 5 1
+0 5 0
+0 0 4
+5 3 0
+1 1 0 2
+3 3 2 1
+1 3 2 5
+2 1 1 3
+2 2 1 4
+
+0 0 5 1 1
+"""
