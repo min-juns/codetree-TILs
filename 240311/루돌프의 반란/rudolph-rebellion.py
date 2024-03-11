@@ -69,7 +69,7 @@ def santa_push(moved_santa, before_move_r, before_move_c, direction, power):
 def move_next_santa(move_id, c_r, c_c, o_d):
     global temp_santa
     n_r, n_c = c_r + santa_dr[o_d], c_c + santa_dc[o_d]
-    temp_santa[move_id - 1] = (n_r, n_c)
+    temp_santa[move_id - 1] = (move_id, n_r, n_c)
     if santa_map[n_r][n_c] != 0:
         next_santa = santa_map[n_r][n_c]
         santa_map[n_r][n_c] = move_id
