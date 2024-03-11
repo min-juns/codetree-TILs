@@ -70,6 +70,10 @@ def move_next_santa(move_id, c_r, c_c, o_d):
     global temp_santa
     n_r, n_c = c_r + santa_dr[o_d], c_c + santa_dc[o_d]
     temp_santa[move_id - 1] = (move_id, n_r, n_c)
+
+    if n_r < 0 or n_c < 0 or n_r >= N or n_c >= N:
+        return
+
     if santa_map[n_r][n_c] != 0:
         next_santa = santa_map[n_r][n_c]
         santa_map[n_r][n_c] = move_id
