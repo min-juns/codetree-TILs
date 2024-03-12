@@ -50,15 +50,15 @@ def move_player(player_id, p_r, p_c):
     return (n_r, n_c)
 
 
-def mark_land():
+def mark_land(idx):
     for r in range(N):
         for c in range(N):
             if game_map[r][c] != 0:
                 player_id = game_map[r][c]
-                player_land[r][c] = (player_id, K+1)
+                player_land[r][c] = (player_id, idx)
 
 
-mark_land()
+mark_land(K)
 turn = 0
 while True:
     turn += 1
@@ -74,7 +74,7 @@ while True:
                     if next_game_map[next_r][next_c] > p_id:
                         next_game_map[next_r][next_c] = p_id
     game_map = next_game_map
-    mark_land()
+    mark_land(K+1)
 
     #### 독점 계약 turn 감소
     for r in range(N):
@@ -98,6 +98,5 @@ while True:
     if turn >= 1000:
         turn = -1
         break
-
 
 print(turn)
