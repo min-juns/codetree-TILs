@@ -57,16 +57,16 @@ def find_turn_map():
     for r in range(N):
         for c in range(N):
             avail_max_l = N - max(r, c)
-            if avail_max_l < 2:
+            if avail_max_l <= 1:
                 continue
-            for al in range(2, avail_max_l):
+            # al이 실제 길이
+            for al in range(2, avail_max_l + 1):
                 find_p, find_e = False, False
-                for ar in range(r, r + al):
-                    for ac in range(c, c + al):
-                        if game_map[ar][ac] == "P":
-                            find_p = True
-                        elif game_map[ar][ac] == "exit":
-                            find_e = True
+                for p_list in player_list:
+                    if r <= p_list[0] <= r + al - 1 and c <= p_list[1] <= c + al - 1:
+                        find_p = True
+                if r <= exit_pos[0] <= r + al - 1 and c <= exit_pos[1] <= c + al - 1:
+                    find_e = True
                 if find_p and find_e:
                     if min_l > al:
                         min_l = al
@@ -79,40 +79,31 @@ def turn_map():
     global player_list
     global exit_pos
 
-    exit_r, exit_c = exit_pos
-    for p in player_list:
-        p_r, p_c = p
-        game_map[p_r][p_c] = "P"
-    game_map[exit_r][exit_c] = "exit"
     temp_game_map = copy.deepcopy(game_map)
 
     best_pos, best_l = find_turn_map()
     best_r, best_c = best_pos
-
     for r in range(best_r, best_r + best_l):
         for c in range(best_c, best_c + best_l):
             temp_r, temp_c = r - best_r, c - best_c
             next_r, next_c = temp_c, best_l - temp_r - 1
             next_r, next_c = next_r + best_r, next_c + best_c
-            if isinstance(game_map[r][c], int):
-                if game_map[r][c] > 0:
-                    temp_game_map[next_r][next_c] = game_map[r][c] - 1
-                else:
-                    temp_game_map[next_r][next_c] = game_map[r][c]
+            if game_map[r][c] > 0:
+                temp_game_map[next_r][next_c] = game_map[r][c] - 1
             else:
                 temp_game_map[next_r][next_c] = game_map[r][c]
 
+    temp_e_r, temp_e_c = exit_pos[0] - best_r, exit_pos[1] - best_c
+    next_r, next_c = temp_e_c, best_l - temp_e_r - 1
+    exit_pos = (next_r + best_r, next_c + best_c)
 
-    player_list = []
-    game_map = copy.deepcopy(temp_game_map)
-    for r in range(N):
-        for c in range(N):
-            if game_map[r][c] == "P":
-                player_list.append((r, c))
-                game_map[r][c] = 0
-            elif game_map[r][c] == 'exit':
-                exit_pos = (r, c)
-                game_map[r][c] = 0
+    for p in range(len(player_list)):
+        p_r, p_c = player_list[p]
+        if best_r <= p_r <= best_r + best_l - 1 and best_c <= p_c <= best_c + best_l - 1:
+            temp_p_r, temp_p_c = p_r - best_r, p_c - best_c
+            next_r, next_c = temp_p_c, best_l - temp_p_r - 1
+            player_list[p] = (next_r + best_r, next_c + best_c)
+    game_map = temp_game_map
 
 
 for k in range(K):
@@ -120,6 +111,7 @@ for k in range(K):
     if len(player_list) == 0:
         break
     turn_map()
+
 
 print(total_move)
 for ep in exit_pos:
