@@ -41,20 +41,19 @@ for M in range(m):
             count += 1
     person_list.append(temp_person_pos)
 
-
 def move_person(list_id):
     global person_list
     person_pos = person_list[list_id]
 
     first_p = 1e+3
-    for id in range(len(person_pos)):
+    num_person = len(person_pos)
+    for id in range(num_person):
         if person_pos[id] == 1:
             first_p = id
             break
-    num_person = len(person_pos)
     if person_pos[(first_p + 1) % num_person] == 2:
         left = True
-    elif person_pos[(first_p - 1 + num_person) % num_person] == 2:
+    elif person_pos[first_p - 1] == 2:
         left = False
 
     next_person_pos = [0 for _ in range(num_person)]
@@ -83,32 +82,60 @@ def throw_ball(round_idx):
     elif ball_direction == 3:
         ball_order = [(i, n - idx - 1) for i in range(n)]
 
-    # 모든 팀을 다 하기 위해
-    for team_idx in range(m):
-        person_pos = person_list[team_idx]
-        line_order = line_list[team_idx]
-        get_ball = False
-        for ba in ball_order:
-            if ba in line_order:
-                first_idx = line_order.index(ba)
-                if person_pos[first_idx] > 0:
-                    # point를 얻고
-                    total_score += person_pos[first_idx] ** 2
-                    # 순서 바꾸기
-                    temp_pos = []
-                    max_num_person = max(person_pos)
-                    for pp in person_pos:
-                        if pp == 0:
-                            temp_pos.append(pp)
-                        elif pp > 0:
-                            temp_pos.append(max_num_person + 1 - pp)
-                    person_list[team_idx] = temp_pos
-                    get_ball = True
-            if get_ball:
-                break
+    get_ball = False
+    for ba in ball_order:
+        for line_m in range(m):
+            line_order = line_list[line_m]
+            if ba not in line_order:
+                continue
+            first_idx = line_order.index(ba)
+            if person_list[line_m][first_idx] == 0:
+                continue
+            # point를 얻고
+            total_score += person_list[line_m][first_idx] ** 2
+            # 순서 바꾸기
+            temp_list = person_list[line_m]
+            temp_pos = []
+            max_num_person = max(temp_list)
+            for pp in temp_list:
+                if pp == 0:
+                    temp_pos.append(pp)
+                elif pp > 0:
+                    temp_pos.append(max_num_person + 1 - pp)
+            person_list[line_m] = temp_pos
+            get_ball = True
+            break
+        if get_ball:
+            break
 
+
+
+"""
+for n_round in range(k):
+    move_person(1)
+    print("round: {}, before throw".format(n_round), person_list[1])
+    throw_ball(n_round)
+    print("round: {}, after throw".format(n_round) ,person_list[1])
+print(line_list[1])
+"""
 for n_round in range(k):
     for M in range(m):
         move_person(M)
     throw_ball(n_round)
+
+
+#print(person_list)
 print(total_score)
+
+"""
+7 3 973
+3 2 1 0 0 0 0
+4 0 4 0 2 1 4
+4 4 4 0 2 0 4
+0 0 0 0 3 4 4
+2 1 3 2 0 0 0
+2 0 0 2 0 0 0
+2 2 2 2 0 0 0
+
+18441
+"""
