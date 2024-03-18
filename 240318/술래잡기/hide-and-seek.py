@@ -99,7 +99,7 @@ def detection():
     temp_score = 0
     cr, cc = finder_pos
     remove_list = []
-    while True:
+    for _ in range(3):
         if cr < 0 or cc < 0 or cr >= n or cc >= n:
             break
         for k in range(len(runner_list)):
