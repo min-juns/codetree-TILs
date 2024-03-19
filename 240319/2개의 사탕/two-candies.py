@@ -129,21 +129,37 @@ def move_pos(d):
             same_pos = True
             # 오른쪽
             if d == 0:
-                if red_candy[1] > blue_candy[1]:
-                    red_first = True
+                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1]) + 1):
+                    if game_map[red_candy[0]][k] == "#" or game_map[red_candy[0]][k] == "O":
+                        same_pos = False
+                if same_pos:
+                    if red_candy[1] > blue_candy[1]:
+                        red_first = True
             elif d == 2:
-                if red_candy[1] < blue_candy[1]:
-                    red_first = True
+                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1]) + 1):
+                    if game_map[red_candy[0]][k] == "#" or game_map[red_candy[0]][k] == "O":
+                        same_pos = False
+                if same_pos:
+                    if red_candy[1] < blue_candy[1]:
+                        red_first = True
     # 위아래로 움직이는 경우
     elif d == 1 or d == 3:
+        same_pos = True
         if red_candy[1] == blue_candy[1]:
-            same_pos = True
             if d == 1:
-                if red_candy[0] > blue_candy[0]:
-                    red_first = True
+                for k in range(min(red_candy[0], blue_candy[0]), max(red_candy[0], blue_candy[0]) + 1):
+                    if game_map[k][red_candy[1]] == "#" or game_map[k][red_candy[1]] == "O":
+                        same_pos = False
+                if same_pos:
+                    if red_candy[0] > blue_candy[0]:
+                        red_first = True
             elif d == 3:
-                if red_candy[0] < blue_candy[0]:
-                    red_first = True
+                for k in range(min(red_candy[0], blue_candy[0]), max(red_candy[0], blue_candy[0]) + 1):
+                    if game_map[k][red_candy[1]] == "#" or game_map[k][red_candy[1]] == "O":
+                        same_pos = False
+                if same_pos:
+                    if red_candy[0] < blue_candy[0]:
+                        red_first = True
 
     dr = [0, 1, 0, -1]
     dc = [1, 0, -1, 0]
