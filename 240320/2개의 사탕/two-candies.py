@@ -112,30 +112,42 @@ def move_pos(d):
 
 
 min_num = 11
-def find_min_num(num):
+def find_min_num(num, before_val):
     global min_num
     global blue_candy
     global red_candy
 
-    if num >= 10:
-        return
     if num >= min_num:
         return
     else:
         current_b_candy = copy.deepcopy(blue_candy)
         current_r_candy = copy.deepcopy(red_candy)
-        for i in range(4):
-            res = move_pos(i)
-            if res == "success":
-                if min_num > num:
-                    min_num = num + 1
-                    return
-            elif res == "go":
-                find_min_num(num + 1)
-            blue_candy = copy.deepcopy(current_b_candy)
-            red_candy = copy.deepcopy(current_r_candy)
+        if num == 0:
+            for i in range(4):
+                res = move_pos(i)
+                if res == "success":
+                    if min_num > num + 1:
+                        min_num = num + 1
+                        return
+                elif res == "go":
+                    find_min_num(num + 1, i)
+                blue_candy = copy.deepcopy(current_b_candy)
+                red_candy = copy.deepcopy(current_r_candy)
+        else:
+            for i in range(4):
+                if i == before_val:
+                    continue
+                res = move_pos(i)
+                if res == "success":
+                    if min_num > num + 1:
+                        min_num = num + 1
+                        return
+                elif res == "go":
+                    find_min_num(num + 1, i)
+                blue_candy = copy.deepcopy(current_b_candy)
+                red_candy = copy.deepcopy(current_r_candy)
 
-find_min_num(0)
+find_min_num(0, 0)
 if min_num == 11:
     print(-1)
 else:
