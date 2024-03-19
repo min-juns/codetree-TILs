@@ -111,7 +111,7 @@ def move_pos(d):
     return "go"
 
 
-min_num = 10
+min_num = 11
 def find_min_num(num):
     global min_num
     global blue_candy
@@ -136,7 +136,7 @@ def find_min_num(num):
             red_candy = copy.deepcopy(current_r_candy)
 
 find_min_num(0)
-if min_num == 10:
+if min_num == 11:
     print(-1)
 else:
     print(min_num)
