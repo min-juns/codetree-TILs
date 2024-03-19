@@ -21,14 +21,14 @@ def move_pos(d):
             same_pos = True
             # 오른쪽
             if d == 0:
-                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1]) + 1):
+                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1])):
                     if game_map[red_candy[0]][k] == "#" or game_map[red_candy[0]][k] == "O":
                         same_pos = False
                 if same_pos:
                     if red_candy[1] > blue_candy[1]:
                         red_first = True
             elif d == 2:
-                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1]) + 1):
+                for k in range(min(red_candy[1], blue_candy[1]), max(red_candy[1], blue_candy[1])):
                     if game_map[red_candy[0]][k] == "#" or game_map[red_candy[0]][k] == "O":
                         same_pos = False
                 if same_pos:
