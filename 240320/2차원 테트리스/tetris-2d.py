@@ -51,11 +51,13 @@ def remove_line_yellow(remove_r):
 def check_remove_yellow():
     global total_point
     while True:
+        run = False
         for r in range(5, 1, -1):
             if yellow_map[r] == [1, 1, 1, 1]:
                 total_point += 1
                 remove_line_yellow(r)
-        else:
+                run = True
+        if not run:
             break
 
     check_times = 0
@@ -153,6 +155,10 @@ for _ in range(k):
     check_remove_yellow()
     put_red(t, x)
     check_remove_red()
+
+    #for ym in yellow_map:
+    #    print(ym)
+    #print("------------------")
 
 print(total_point)
 
