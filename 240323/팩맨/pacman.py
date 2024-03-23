@@ -1,3 +1,9 @@
+"""
+a = {}
+a[(1, 2, 3)] = (4, 5, 6)
+print(a)
+print(a.keys())
+"""
 import copy
 # 한 칸은 4
 m, t = map(int, input().split())
@@ -21,8 +27,20 @@ dc = [0, -1, -1, -1, 0, 1, 1, 1]
 def move_monster():
     global monsters
 
+    move_pos = {}
+
     for ml in range(len(monsters)):
         mr, mc, md = monsters[ml]
+
+        dont_run = False
+        for m_key in move_pos.keys():
+            if m_key == (mr, mc, md):
+                monsters[ml] = move_pos[m_key]
+                dont_run = True
+                break
+        if dont_run:
+            continue
+
         moved = False
         for i in range(8):
             d = (md + i) % 8
@@ -33,7 +51,6 @@ def move_monster():
             # 팩맨이 있으면 다시
             if nr == pack_r and nc == pack_c:
                 continue
-                
             cant_go = False
             for dm in dead_monster[0]:
                 if dm == (nr, nc):
@@ -47,12 +64,14 @@ def move_monster():
                     break
             if cant_go:
                 continue
-
             moved = True
             next_contents = (nr, nc, d)
             break
         if moved:
+            move_pos[(mr, mc, md)] = next_contents
             monsters[ml] = next_contents
+        else:
+            move_pos[(mr, mc, md)] = (mr, mc, md)
 
 # 몬스터 사체
 dead_monster = [[],[],[]]
@@ -146,5 +165,8 @@ for _ in range(t):
     # 5. 몬스터 복제 완성
     done_copy()
     #print("4. ", monsters)
+    #print("pack pos: ", pack_r, pack_c)
+    #print("dead monster: ", dead_monster)
+    #print("=============================")
 
 print(len(monsters))
