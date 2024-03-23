@@ -113,7 +113,7 @@ def expand_monster():
     new_monster_list = []
     repeat_idx = monster_list[0]
     repeat_num = 1
-    for i in range(1, len(monster_list), len(index_order)):
+    for i in range(1, len(monster_list)):
         if monster_list[i] == repeat_idx:
             repeat_num += 1
         else:
