@@ -76,6 +76,14 @@ def find_repeated_idx():
     repeated_num = 0
     for i, (cr, cc) in enumerate(index_order):
         if game_map[cr][cc] == 0:
+            if repeated_num >= 4:
+                check_true = True
+                player_point[repeat_idx - 1] += repeated_num
+                for ll in range(repeated_num):
+                    remove_idx = i - (ll + 1)
+                    remove_r, remove_c = index_order[remove_idx]
+                    game_map[remove_r][remove_c] = 0
+
             repeat_idx = -1
             repeated_num = 0
             continue
@@ -107,7 +115,6 @@ def expand_monster():
             break
 
     if len(monster_list) == 0:
-        print("error!")
         return
 
     new_monster_list = []
@@ -140,14 +147,11 @@ for _ in range(m):
     attack_d, attack_l = map(int, input().split())
     attack(attack_d, attack_l)
     organize_line()
-
-
     while True:
         check_run = find_repeated_idx()
         if not check_run:
             break
         organize_line()
-
     expand_monster()
 
 total_point = 0
