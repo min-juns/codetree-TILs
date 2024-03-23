@@ -33,12 +33,21 @@ def move_monster():
             # 팩맨이 있으면 다시
             if nr == pack_r and nc == pack_c:
                 continue
+                
+            cant_go = False
             for dm in dead_monster[0]:
                 if dm == (nr, nc):
-                    continue
+                    cant_go = True
+                    break
+            if cant_go:
+                continue
             for dm in dead_monster[1]:
                 if dm == (nr, nc):
-                    continue
+                    cant_go = True
+                    break
+            if cant_go:
+                continue
+
             moved = True
             next_contents = (nr, nc, d)
             break
